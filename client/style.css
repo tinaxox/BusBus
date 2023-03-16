@@ -1,0 +1,117 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon {
+  height: 2.5em;
+  width: 2.5em;
+}
+
+.btngroup {
+  margin-top: 2em;
+  display: grid;
+}
+
+@media only screen and (max-width: 600px) {
+  .btngroup {
+    grid-template-columns: 1fr;
+  }
+}
+@media only screen and (min-width: 900px) {
+  .btngroup {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .btngroup {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+.topnav {
+  text-align: center;
+  background-color: #c3c3c3c1;
+  height: 3.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.topnav input {
+  background-color: rgb(244, 243, 243);
+  padding: 0.7em;
+  width: 17em;
+  border: none;
+  border-radius: 0.4em;
+  font-size: 17px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0.075rem 0.03rem 0.3rem;
+}
+
+.btn {
+  font-size: 16px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  color: rgb(40, 40, 40);
+  background-color: #fbfbfb;
+  margin: 0.4em 0.4em 0.4em 0.4em;
+  height: 2.7em;
+  width: 16em;
+  border: none;
+  border-width: 0.1em;
+  border-radius: 0.6rem;
+  box-shadow: rgba(0, 0, 0, 0.35) 0.075rem 0.03rem 0.3rem;
+  cursor: pointer;
+}
+
+.stops {
+  height: 100%;
+  padding: 0;
+  margin: 2em;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-auto-rows: 3em;
+  grid-gap: 0.5em;
+}
+.stop {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  align-self: center;
+  text-align: center;
+  margin: 1em;
+  border: none;
+  min-width: 3em;
+  padding: 1em;
+  border-width: 0.1em;
+  border-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.35) 0.075rem 0.03rem 0.3rem;
+}
+
+@media only screen and (min-width: 200px) {
+  .stops {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media only screen and (min-width: 400px) {
+  .stops {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media only screen and (min-width: 600px) {
+  .stops {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+@media only screen and (min-width: 1000px) {
+  .stops {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .stops {
+    grid-template-columns: repeat(10, 1fr);
+  }
+}

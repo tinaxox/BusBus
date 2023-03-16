@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    // "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "noImplicitReturns": true,
+    "removeComments": true,
+    "lib": ["dom", "dom.iterable", "es2021.String", "ES2015"]
+  },
+  "exclude": ["node_modules", "*.js"],
+  "include": ["./**/*.ts"]
+}
