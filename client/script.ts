@@ -39,39 +39,66 @@ search?.addEventListener("keydown", async (e) => {
   }
 });
 
-function onStopClick(bus: string, li: HTMLLIElement) {
-  li.innerHTML = bus;
-  li.style.background = "rgb(80, 200, 120)";
+function onStopClick(bus: string, time: string, li: HTMLLIElement) {
+  if (li.innerHTML != bus) {
+    li.innerHTML = bus;
+    li.style.background = "rgb(80, 200, 120)";
+  } else {
+    li.innerHTML = time;
+    li.style.background = "white";
+  }
 }
 
 function makeStops(response: any) {
-  console.log(response);
+  var today = new Date();
+  var time = today.getHours() * 60 + today.getMinutes();
+
+  const hours_min = Math.floor((time - 10) / 60);
+  const minutes_min = (time - 10) % 60;
+  const min =
+    hours_min + ":" + (minutes_min > 10 ? minutes_min : "0" + minutes_min);
+
+  const hours_max = Math.floor((time + 10) / 60);
+  const minutes_max = (time + 10) % 60;
+  const max =
+    hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
+
   const ul = document.createElement("ul");
   ul.className = "stops";
   for (let i = 0; i < response.busDepartureA.length; i++) {
+    if (
+      response.busDepartureA[i].time < min ||
+      response.busDepartureA[i].time > max
+    )
+      continue;
     const li = document.createElement("li");
     li.innerHTML = response.busDepartureA[i].time;
     li.className = "stop";
     li.style.cursor = "pointer";
-    li.id = response.busDepartureA[i].busLineId;
-    li.onclick = () => onStopClick(li.id, li);
-    console.log(li.innerHTML);
+    li.onclick = () =>
+      onStopClick(
+        response.busDepartureA[i].busLineId,
+        response.busDepartureA[i].time,
+        li
+      );
     ul.appendChild(li);
   }
   document.body.appendChild(ul);
 }
 
+//smerove da uvedes, proveri koja je koja stanica
+//ime stanice iznad stops kada se klikne
+//mogucnost vracanja nazad
+//vikendi (fajl i datum uvedi da uzima i tako izlistava po danu)
+
 async function onClick(btn_text: string) {
   const name = btn_text.split(" ").join("_");
-  console.log(name);
   const response = await get(`${url}${name}`);
 
   if (btn_group) {
     document.body.removeChild(btn_group);
   }
   makeStops(response);
-  //tu ce da budu spiskovi buseva na stanici
-  //izbacuje sve buseve na stanici u to vreme -10min
 }
 
 async function getButtons(url: string) {
@@ -81,7 +108,6 @@ async function getButtons(url: string) {
   fetch(url, options)
     .then(function (response) {
       if (response.ok) {
-        // console.log(response.json());
         return response.json();
       } else throw new Error("Response: " + response.status);
     })

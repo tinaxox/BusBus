@@ -83,22 +83,38 @@ search === null || search === void 0 ? void 0 : search.addEventListener("keydown
         return [2 /*return*/];
     });
 }); });
-function onStopClick(bus, ul, li) {
-    li.innerHTML = bus;
-    li.style.background = "rgb(80, 200, 120)";
+function onStopClick(bus, time, li) {
+    if (li.innerHTML != bus) {
+        li.innerHTML = bus;
+        li.style.background = "rgb(80, 200, 120)";
+    }
+    else {
+        li.innerHTML = time;
+        li.style.background = "white";
+    }
 }
 function makeStops(response) {
-    console.log(response);
+    var today = new Date();
+    var time = today.getHours() * 60 + today.getMinutes();
+    var hours_min = Math.floor((time - 10) / 60);
+    var minutes_min = (time - 10) % 60;
+    var min = hours_min + ":" + (minutes_min > 10 ? minutes_min : "0" + minutes_min);
+    var hours_max = Math.floor((time + 10) / 60);
+    var minutes_max = (time + 10) % 60;
+    var max = hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
     var ul = document.createElement("ul");
     ul.className = "stops";
     var _loop_1 = function (i) {
+        if (response.busDepartureA[i].time < min ||
+            response.busDepartureA[i].time > max)
+            return "continue";
         var li = document.createElement("li");
         li.innerHTML = response.busDepartureA[i].time;
         li.className = "stop";
         li.style.cursor = "pointer";
-        li.id = response.busDepartureA[i].busLineId;
-        li.onclick = function () { return onStopClick(li.id, ul, li); };
-        console.log(li.innerHTML);
+        li.onclick = function () {
+            return onStopClick(response.busDepartureA[i].busLineId, response.busDepartureA[i].time, li);
+        };
         ul.appendChild(li);
     };
     for (var i = 0; i < response.busDepartureA.length; i++) {
@@ -106,6 +122,10 @@ function makeStops(response) {
     }
     document.body.appendChild(ul);
 }
+//smerove da uvedes, proveri koja je koja stanica
+//ime stanice iznad stops kada se klikne
+//mogucnost vracanja nazad
+//vikendi (fajl i datum uvedi da uzima i tako izlistava po danu)
 function onClick(btn_text) {
     return __awaiter(this, void 0, void 0, function () {
         var name, response;
@@ -113,7 +133,6 @@ function onClick(btn_text) {
             switch (_a.label) {
                 case 0:
                     name = btn_text.split(" ").join("_");
-                    console.log(name);
                     return [4 /*yield*/, get("".concat(url).concat(name))];
                 case 1:
                     response = _a.sent();
@@ -136,7 +155,6 @@ function getButtons(url) {
             fetch(url, options)
                 .then(function (response) {
                 if (response.ok) {
-                    // console.log(response.json());
                     return response.json();
                 }
                 else
