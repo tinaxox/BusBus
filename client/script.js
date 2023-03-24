@@ -93,6 +93,24 @@ function onStopClick(bus, time, li) {
         li.style.background = "white";
     }
 }
+function byDeparture(departure, max, min, ul) {
+    var _loop_1 = function (i) {
+        if (departure[i].time < min || departure[i].time > max)
+            return "continue";
+        var li = document.createElement("li");
+        li.innerHTML = departure[i].time;
+        li.className = "stop";
+        li.style.cursor = "pointer";
+        li.onclick = function () {
+            return onStopClick(departure[i].busLineId, departure[i].time, li);
+        };
+        ul.appendChild(li);
+    };
+    for (var i = 0; i < departure.length; i++) {
+        _loop_1(i);
+    }
+    document.body.appendChild(ul);
+}
 function makeStops(response) {
     var today = new Date();
     var time = today.getHours() * 60 + today.getMinutes();
@@ -102,25 +120,22 @@ function makeStops(response) {
     var hours_max = Math.floor((time + 10) / 60);
     var minutes_max = (time + 10) % 60;
     var max = hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
-    var ul = document.createElement("ul");
-    ul.className = "stops";
-    var _loop_1 = function (i) {
-        if (response.busDepartureA[i].time < min ||
-            response.busDepartureA[i].time > max)
-            return "continue";
-        var li = document.createElement("li");
-        li.innerHTML = response.busDepartureA[i].time;
-        li.className = "stop";
-        li.style.cursor = "pointer";
-        li.onclick = function () {
-            return onStopClick(response.busDepartureA[i].busLineId, response.busDepartureA[i].time, li);
-        };
-        ul.appendChild(li);
-    };
-    for (var i = 0; i < response.busDepartureA.length; i++) {
-        _loop_1(i);
-    }
-    document.body.appendChild(ul);
+    var ul1 = document.createElement("ul");
+    ul1.className = "stops";
+    var p1 = document.createElement("p");
+    p1.className = "dir-p";
+    p1.textContent = "Smer A - OD GRADA";
+    document.body.appendChild(p1);
+    var departureA = response.busDepartureA;
+    byDeparture(departureA, max, min, ul1);
+    var ul2 = document.createElement("ul");
+    ul2.className = "stops";
+    var p2 = document.createElement("p");
+    p2.textContent = "Smer B - DO GRADA";
+    p2.className = "dir-p";
+    document.body.appendChild(p2);
+    var departureB = response.busDepartureB;
+    byDeparture(departureB, max, min, ul2);
 }
 //smerove da uvedes, proveri koja je koja stanica
 //ime stanice iznad stops kada se klikne
@@ -180,6 +195,11 @@ function getButtons(url) {
             return [2 /*return*/];
         });
     });
+}
+// const back = document.getElementById("back_icon");
+// if (back) back.onclick = () => redirect();
+function redirect() {
+    location.href = "http://127.0.0.1:5500/client/";
 }
 function start() {
     getButtons(url);

@@ -11,8 +11,21 @@ body {
   width: 2.5em;
 }
 
+.nav-bar {
+  width: 100%;
+  display: flex;
+}
+.arrow {
+  height: 2.5em;
+  width: 2.5em;
+  transform: scaleX(-1);
+  position: fixed;
+  margin: 0.5em 0 0 0.5em;
+  cursor: pointer;
+}
+
 .btngroup {
-  margin-top: 2em;
+  margin-top: 3em;
   display: grid;
 }
 
@@ -76,9 +89,12 @@ body {
   grid-template-columns: repeat(1, 1fr);
   grid-auto-rows: 3em;
   grid-gap: 0.5em;
+  align-items: center;
+  /* background-color: green; */
 }
 .stop {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  /* background-color: yellow; */
   align-self: center;
   text-align: center;
   margin: 1em;
@@ -88,6 +104,14 @@ body {
   border-width: 0.1em;
   border-radius: 1rem;
   box-shadow: rgba(0, 0, 0, 0.35) 0.075rem 0.03rem 0.3rem;
+}
+
+.dir-p {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  margin: 2em 0 0em 0;
+  background-color: rgba(210, 210, 210, 255);
+  padding: 1em;
+  border-radius: 20px;
 }
 
 @media only screen and (min-width: 200px) {
@@ -105,7 +129,7 @@ body {
     grid-template-columns: repeat(5, 1fr);
   }
 }
-@media only screen and (min-width: 1000px) {
+/* @media only screen and (min-width: 1000px) {
   .stops {
     grid-template-columns: repeat(8, 1fr);
   }
@@ -114,4 +138,4 @@ body {
   .stops {
     grid-template-columns: repeat(10, 1fr);
   }
-}
+} */

@@ -270,8 +270,7 @@ async function getStations(departures: StationsByDeparture[], day: Day) {
       for (let stop of departure.stops) {
         const time: string = stop.stopTime;
         const station: Station = { busLineId, time };
-        saveStationToFile(station, day, stop.stanceName, "B");
-        if (stationExists(stop.stanceName, stationsNames) === false) {
+        if (stationExists(stop.stanceName, stationsNames) == false) {
           stationsNames.push(stop.stanceName);
         }
         saveStationToFile(station, day, stop.stanceName, "B");
@@ -282,7 +281,7 @@ async function getStations(departures: StationsByDeparture[], day: Day) {
 }
 
 async function start() {
-  // const lines = await getLines();
+  const lines = await getLines();
   // const busesWork = await getBus(lines, Day.workday);
   // const busesSat = await getBus(lines, Day.saturday);
   // const busesSun = await getBus(lines, Day.sunday);
@@ -300,10 +299,10 @@ async function start() {
   // }
   // const trips_saturday = await getTripsFromFile(Day.saturday);
   // const trips_sunday = await getTripsFromFile(Day.sunday);
-  // const trips_workday = await getTripsFromFile(Day.workday, lines);
-  // const stationsNames = await getStations(trips_workday, Day.workday);
-  // saveStationsToFile(stationsNames);
-  const stationsNames = (await getStationsFromFile()) as string[];
+  const trips_workday = await getTripsFromFile(Day.workday, lines);
+  const stationsNames = await getStations(trips_workday, Day.workday);
+  saveStationsToFile(stationsNames);
+  // const stationsNames = (await getStationsFromFile()) as string[];
   // console.log(stationsNames);
   // setButtons(stationsNames, document);
   // for (let i = 0; i < stationsNames.length; i++)

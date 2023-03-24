@@ -49,6 +49,25 @@ function onStopClick(bus: string, time: string, li: HTMLLIElement) {
   }
 }
 
+function byDeparture(
+  departure: any,
+  max: string,
+  min: string,
+  ul: HTMLUListElement
+) {
+  for (let i = 0; i < departure.length; i++) {
+    if (departure[i].time < min || departure[i].time > max) continue;
+    const li = document.createElement("li");
+    li.innerHTML = departure[i].time;
+    li.className = "stop";
+    li.style.cursor = "pointer";
+    li.onclick = () =>
+      onStopClick(departure[i].busLineId, departure[i].time, li);
+    ul.appendChild(li);
+  }
+  document.body.appendChild(ul);
+}
+
 function makeStops(response: any) {
   var today = new Date();
   var time = today.getHours() * 60 + today.getMinutes();
@@ -63,27 +82,25 @@ function makeStops(response: any) {
   const max =
     hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
 
-  const ul = document.createElement("ul");
-  ul.className = "stops";
-  for (let i = 0; i < response.busDepartureA.length; i++) {
-    if (
-      response.busDepartureA[i].time < min ||
-      response.busDepartureA[i].time > max
-    )
-      continue;
-    const li = document.createElement("li");
-    li.innerHTML = response.busDepartureA[i].time;
-    li.className = "stop";
-    li.style.cursor = "pointer";
-    li.onclick = () =>
-      onStopClick(
-        response.busDepartureA[i].busLineId,
-        response.busDepartureA[i].time,
-        li
-      );
-    ul.appendChild(li);
-  }
-  document.body.appendChild(ul);
+  const ul1 = document.createElement("ul");
+  ul1.className = "stops";
+
+  const p1 = document.createElement("p");
+  p1.className = "dir-p";
+  p1.textContent = "Smer A - OD GRADA";
+  document.body.appendChild(p1);
+  const departureA = response.busDepartureA;
+  byDeparture(departureA, max, min, ul1);
+
+  const ul2 = document.createElement("ul");
+  ul2.className = "stops";
+
+  const p2 = document.createElement("p");
+  p2.textContent = "Smer B - DO GRADA";
+  p2.className = "dir-p";
+  document.body.appendChild(p2);
+  const departureB = response.busDepartureB;
+  byDeparture(departureB, max, min, ul2);
 }
 
 //smerove da uvedes, proveri koja je koja stanica
@@ -126,6 +143,13 @@ async function getButtons(url: string) {
       }
     });
 }
+// const back = document.getElementById("back_icon");
+// if (back) back.onclick = () => redirect();
+
+function redirect() {
+  location.href = "http://127.0.0.1:5500/client/";
+}
+
 function start() {
   getButtons(url);
 }

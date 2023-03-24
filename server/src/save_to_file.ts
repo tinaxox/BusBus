@@ -72,5 +72,5 @@ export async function saveStationToFile(
   fs.writeFileSync("./stanice/" + fileName, JSON.stringify(stations));
 }
 export async function saveStationsToFile(stations: string[]) {
-  fs.writeFileSync(".src/stations_names.json", JSON.stringify(stations));
+  fs.writeFileSync("./src/stations_names.json", JSON.stringify(stations));
 }
