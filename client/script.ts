@@ -40,11 +40,11 @@ search?.addEventListener("keydown", async (e) => {
 });
 
 function onStopClick(bus: string, time: string, li: HTMLLIElement) {
-  if (li.innerHTML != bus) {
-    li.innerHTML = bus;
-    li.style.background = "rgb(80, 200, 120)";
-  } else {
+  if (li.innerHTML != time) {
     li.innerHTML = time;
+    li.style.color = "rgb(80, 200, 120)";
+  } else {
+    li.innerHTML = bus;
     li.style.background = "white";
   }
 }
@@ -58,7 +58,7 @@ function byDeparture(
   for (let i = 0; i < departure.length; i++) {
     if (departure[i].time < min || departure[i].time > max) continue;
     const li = document.createElement("li");
-    li.innerHTML = departure[i].time;
+    li.innerHTML = departure[i].busLineId;
     li.className = "stop";
     li.style.cursor = "pointer";
     li.onclick = () =>
@@ -70,6 +70,7 @@ function byDeparture(
 
 function makeStops(response: any) {
   var today = new Date();
+
   var time = today.getHours() * 60 + today.getMinutes();
 
   const hours_min = Math.floor((time - 10) / 60);
@@ -77,11 +78,10 @@ function makeStops(response: any) {
   const min =
     hours_min + ":" + (minutes_min > 10 ? minutes_min : "0" + minutes_min);
 
-  const hours_max = Math.floor((time + 10) / 60);
-  const minutes_max = (time + 10) % 60;
+  const hours_max = Math.floor((time + 30) / 60);
+  const minutes_max = (time + 30) % 60;
   const max =
     hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
-
   const ul1 = document.createElement("ul");
   ul1.className = "stops";
 
@@ -103,18 +103,27 @@ function makeStops(response: any) {
   byDeparture(departureB, max, min, ul2);
 }
 
-//smerove da uvedes, proveri koja je koja stanica
-//ime stanice iznad stops kada se klikne
-//mogucnost vracanja nazad
-//vikendi (fajl i datum uvedi da uzima i tako izlistava po danu)
-
 async function onClick(btn_text: string) {
-  const name = btn_text.split(" ").join("_");
+  var today = new Date();
+  let day;
+  if (today.getDay() == 6) {
+    day = "saturday";
+  } else if (today.getDay() == 0) {
+    day = "sunday";
+  } else {
+    day = "work_day";
+  }
+  const name = btn_text.split(" ").join("_") + "_" + day;
   const response = await get(`${url}${name}`);
 
   if (btn_group) {
     document.body.removeChild(btn_group);
   }
+  const stationName = document.createElement("p");
+  const nav_bar = document.getElementById("station-name");
+  stationName.className = "station_name";
+  stationName.textContent = btn_text;
+  nav_bar?.appendChild(stationName);
   makeStops(response);
 }
 

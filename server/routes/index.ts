@@ -15,7 +15,7 @@ router.get("/", async (_req, res) => {
 
 async function getStationStops(station: string) {
   const stations = JSON.parse(
-    (await fs.readFileSync(`./stanice/${station}_work_day.json`)).toString()
+    (await fs.readFileSync(`./stanice/${station}.json`)).toString()
   );
   return stations;
 }

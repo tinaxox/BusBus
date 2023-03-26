@@ -84,12 +84,12 @@ search === null || search === void 0 ? void 0 : search.addEventListener("keydown
     });
 }); });
 function onStopClick(bus, time, li) {
-    if (li.innerHTML != bus) {
-        li.innerHTML = bus;
-        li.style.background = "rgb(80, 200, 120)";
+    if (li.innerHTML != time) {
+        li.innerHTML = time;
+        li.style.color = "rgb(80, 200, 120)";
     }
     else {
-        li.innerHTML = time;
+        li.innerHTML = bus;
         li.style.background = "white";
     }
 }
@@ -98,7 +98,7 @@ function byDeparture(departure, max, min, ul) {
         if (departure[i].time < min || departure[i].time > max)
             return "continue";
         var li = document.createElement("li");
-        li.innerHTML = departure[i].time;
+        li.innerHTML = departure[i].busLineId;
         li.className = "stop";
         li.style.cursor = "pointer";
         li.onclick = function () {
@@ -117,9 +117,11 @@ function makeStops(response) {
     var hours_min = Math.floor((time - 10) / 60);
     var minutes_min = (time - 10) % 60;
     var min = hours_min + ":" + (minutes_min > 10 ? minutes_min : "0" + minutes_min);
-    var hours_max = Math.floor((time + 10) / 60);
-    var minutes_max = (time + 10) % 60;
+    var hours_max = Math.floor((time + 30) / 60);
+    var minutes_max = (time + 30) % 60;
+    console.log(minutes_max);
     var max = hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
+    console.log(max);
     var ul1 = document.createElement("ul");
     ul1.className = "stops";
     var p1 = document.createElement("p");
@@ -137,23 +139,34 @@ function makeStops(response) {
     var departureB = response.busDepartureB;
     byDeparture(departureB, max, min, ul2);
 }
-//smerove da uvedes, proveri koja je koja stanica
-//ime stanice iznad stops kada se klikne
-//mogucnost vracanja nazad
-//vikendi (fajl i datum uvedi da uzima i tako izlistava po danu)
 function onClick(btn_text) {
     return __awaiter(this, void 0, void 0, function () {
-        var name, response;
+        var today, day, name, response, stationName, nav_bar;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    name = btn_text.split(" ").join("_");
+                    today = new Date();
+                    if (today.getDay() == 6) {
+                        day = "saturday";
+                    }
+                    else if (today.getDay() == 0) {
+                        day = "sunday";
+                    }
+                    else {
+                        day = "work_day";
+                    }
+                    name = btn_text.split(" ").join("_") + "_" + day;
                     return [4 /*yield*/, get("".concat(url).concat(name))];
                 case 1:
                     response = _a.sent();
                     if (btn_group) {
                         document.body.removeChild(btn_group);
                     }
+                    stationName = document.createElement("p");
+                    nav_bar = document.getElementById("station-name");
+                    stationName.className = "station_name";
+                    stationName.textContent = btn_text;
+                    nav_bar === null || nav_bar === void 0 ? void 0 : nav_bar.appendChild(stationName);
                     makeStops(response);
                     return [2 /*return*/];
             }

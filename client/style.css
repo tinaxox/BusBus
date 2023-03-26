@@ -20,8 +20,18 @@ body {
   width: 2.5em;
   transform: scaleX(-1);
   position: fixed;
-  margin: 0.5em 0 0 0.5em;
+  margin: 1em 0 0 0.5em;
   cursor: pointer;
+}
+.station_name {
+  margin-top: 2em;
+  background-color: white;
+  padding: 0.5em;
+  box-shadow: rgba(0, 0, 0, 0.35) 0.075rem 0.03rem 0.3rem;
+  border-radius: 0.5em;
+  font-size: large;
+  font-style: italic;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
 .btngroup {
@@ -59,7 +69,7 @@ body {
   padding: 0.7em;
   width: 17em;
   border: none;
-  border-radius: 0.4em;
+  border-radius: 0.5em;
   font-size: 17px;
   box-shadow: rgba(0, 0, 0, 0.35) 0.075rem 0.03rem 0.3rem;
 }
@@ -79,6 +89,9 @@ body {
   box-shadow: rgba(0, 0, 0, 0.35) 0.075rem 0.03rem 0.3rem;
   cursor: pointer;
 }
+.btn:hover {
+  background-color: #d4d4d4;
+}
 
 .stops {
   height: 100%;
@@ -95,6 +108,7 @@ body {
 .stop {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   /* background-color: yellow; */
+  color: black !important;
   align-self: center;
   text-align: center;
   margin: 1em;
@@ -105,10 +119,13 @@ body {
   border-radius: 1rem;
   box-shadow: rgba(0, 0, 0, 0.35) 0.075rem 0.03rem 0.3rem;
 }
+.stop:hover {
+  background-color: rgb(241, 241, 241) !important;
+}
 
 .dir-p {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  margin: 2em 0 0em 0;
+  margin: 1em 0 0em 0;
   background-color: rgba(210, 210, 210, 255);
   padding: 1em;
   border-radius: 20px;
