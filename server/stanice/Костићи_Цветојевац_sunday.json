@@ -1,1 +1,1 @@
-{"busDepartureA":[{"busLineId":"9","time":"06:50"},{"busLineId":"9","time":"15:40"},{"busLineId":"9","time":"20:40"}],"busDepartureB":[]}
+{"busDepartureA":[{"busLineId":"9","time":"06:50","direction":"Ћифтина Ћуприја-Милатовац - Цветојевац"},{"busLineId":"9","time":"15:40","direction":"Ћифтина Ћуприја-Милатовац - Цветојевац"},{"busLineId":"9","time":"20:40","direction":"Ћифтина Ћуприја-Милатовац - Цветојевац"}],"busDepartureB":[]}

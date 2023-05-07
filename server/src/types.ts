@@ -47,6 +47,7 @@ export type StationByDeparture = {
 export type Station = {
   busLineId: string;
   time: string;
+  direction: string;
 };
 
 export enum Day {

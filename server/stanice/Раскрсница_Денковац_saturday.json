@@ -1,1 +1,1 @@
-{"busDepartureA":[{"busLineId":"605","time":"06:43"},{"busLineId":"605","time":"17:08"}],"busDepartureB":[{"busLineId":"605","time":"07:16"},{"busLineId":"605","time":"18:11"}]}
+{"busDepartureA":[{"busLineId":"605","time":"06:43","direction":"Крагујевац-/Дубрава/ Дулене"},{"busLineId":"605","time":"17:08","direction":"Крагујевац-/Дубрава/ Дулене"}],"busDepartureB":[{"busLineId":"605","time":"07:16","direction":"Дулене-Крагујевац"},{"busLineId":"605","time":"18:11","direction":"Дулене-Крагујевац"}]}

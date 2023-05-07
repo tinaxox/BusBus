@@ -39,11 +39,25 @@ search?.addEventListener("keydown", async (e) => {
   }
 });
 
-function onStopClick(bus: string, time: string, li: HTMLLIElement) {
+function onStopClick(
+  bus: string,
+  time: string,
+  direction: string,
+  li: HTMLLIElement,
+  ul: HTMLUListElement
+) {
+  const drop_down = document.getElementById("drop");
+  const paragraph = document.getElementById("dir");
+  const btns = document.getElementById("btn_group");
   if (li.innerHTML != time) {
     li.innerHTML = time;
-    li.style.color = "rgb(80, 200, 120)";
+    li.style.background = "rgb(84,180,53)";
+    paragraph!.innerHTML = direction;
+    drop_down!.style.visibility = "visible";
+    btns!.style.display = "none";
   } else {
+    drop_down!.style.visibility = "hidden";
+    btns!.style.display = "grid";
     li.innerHTML = bus;
     li.style.background = "white";
   }
@@ -62,29 +76,38 @@ function byDeparture(
     li.className = "stop";
     li.style.cursor = "pointer";
     li.onclick = () =>
-      onStopClick(departure[i].busLineId, departure[i].time, li);
+      onStopClick(
+        departure[i].busLineId,
+        departure[i].time,
+        departure[i].direction,
+        li,
+        ul
+      );
     ul.appendChild(li);
   }
   document.body.appendChild(ul);
 }
 
 function makeStops(response: any) {
-  var today = new Date();
+  // var today = new Date();
 
-  var time = today.getHours() * 60 + today.getMinutes();
+  // var time = today.getHours() * 60 + today.getMinutes();
 
-  const hours_min = Math.floor((time - 10) / 60);
-  const minutes_min = (time - 10) % 60;
-  const min =
-    hours_min + ":" + (minutes_min > 10 ? minutes_min : "0" + minutes_min);
+  // const hours_min = Math.floor((time - 10) / 60);
+  // const minutes_min = (time - 10) % 60;
+  // const min =
+  //   hours_min + ":" + (minutes_min > 10 ? minutes_min : "0" + minutes_min);
 
-  const hours_max = Math.floor((time + 30) / 60);
-  const minutes_max = (time + 30) % 60;
-  const max =
-    hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
+  // const hours_max = Math.floor((time + 30) / 60);
+  // const minutes_max = (time + 30) % 60;
+  // const max =
+  //   hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
   const ul1 = document.createElement("ul");
   ul1.className = "stops";
 
+  const min = "00:00:00";
+
+  const max = "24:00:00";
   const p1 = document.createElement("p");
   p1.className = "dir-p";
   p1.textContent = "Smer A - OD GRADA";

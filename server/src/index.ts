@@ -256,9 +256,10 @@ async function getStations(departures: StationsByDeparture[], day: Day) {
   for (let busLine of departures) {
     const busLineId: string = busLine.busLineId;
     for (let departure of busLine.busDepartureA) {
+      const direction: string = departure.startPoint + "-" + departure.endPoint;
       for (let stop of departure.stops) {
         const time: string = stop.stopTime;
-        const station: Station = { busLineId, time }; //treba mi smer!!
+        const station: Station = { busLineId, time, direction }; //treba mi smer!!
         const exists = stationExists(stop.stanceName, stationsNames);
         if (exists == false) {
           stationsNames.push(stop.stanceName);
@@ -267,9 +268,10 @@ async function getStations(departures: StationsByDeparture[], day: Day) {
       }
     }
     for (let departure of busLine.busDepartureB) {
+      const direction: string = departure.startPoint + "-" + departure.endPoint;
       for (let stop of departure.stops) {
         const time: string = stop.stopTime;
-        const station: Station = { busLineId, time };
+        const station: Station = { busLineId, time, direction };
         if (stationExists(stop.stanceName, stationsNames) == false) {
           stationsNames.push(stop.stanceName);
         }
@@ -281,7 +283,7 @@ async function getStations(departures: StationsByDeparture[], day: Day) {
 }
 
 async function start() {
-  // const lines = await getLines();
+  const lines = await getLines();
   // const busesWork = await getBus(lines, Day.workday);
   // const busesSat = await getBus(lines, Day.saturday);
   // const busesSun = await getBus(lines, Day.sunday);
