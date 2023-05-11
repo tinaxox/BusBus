@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
-var url = "http://localhost:5000/";
+var url = "http://192.168.0.32:5000/";
 function get(URL) {
     return __awaiter(this, void 0, void 0, function () {
         var response;
@@ -83,22 +83,61 @@ search === null || search === void 0 ? void 0 : search.addEventListener("keydown
         return [2 /*return*/];
     });
 }); });
-function onStopClick(bus, time, direction, li, ul) {
+function findLength(str) {
+    var final;
+    if (str.length > 1)
+        final = str;
+    else
+        final = "0" + str;
+    return final;
+}
+function getTime(time) {
+    var today = new Date();
+    var yearToday = today.getFullYear();
+    var monthToday = (today.getMonth() + 1).toString();
+    var finalm = findLength(monthToday);
+    var dayToday = today.getDate().toString();
+    var finald = findLength(dayToday);
+    var dateToday = yearToday + "-" + finalm + "-" + finald;
+    var arrival = new Date(dateToday + "T" + time[0] + time[1] + ":" + time[3] + time[4] + ":" + "00");
+    var diff = arrival.valueOf() - today.valueOf();
+    var ss = Math.floor(diff / 1000);
+    var minutes = Math.floor(ss / 60);
+    return minutes;
+}
+function onStopClick(bus, time, direction, li
+// ul: HTMLUListElement
+) {
     var drop_down = document.getElementById("drop");
+    var ex_paragraph = document.getElementsByClassName("dir-p");
     var paragraph = document.getElementById("dir");
-    var btns = document.getElementById("btn_group");
+    var info_time = document.getElementById("info-time");
+    var info_in = document.getElementById("info-in-mins");
+    var stops = document.getElementsByClassName("stops");
+    var stationName = document.getElementById("statioName");
+    var busName = document.getElementById("bus-name");
     if (li.innerHTML != time) {
-        li.innerHTML = time;
-        li.style.background = "rgb(84,180,53)";
+        stationName.style.display = "none";
+        busName.textContent = bus;
+        busName.style.display = "block";
         paragraph.innerHTML = direction;
+        info_time.innerHTML = time;
+        var arrival_time = getTime(time);
+        info_in.innerHTML = "za " + arrival_time.toString() + " minuta";
         drop_down.style.visibility = "visible";
-        btns.style.display = "none";
-    }
-    else {
-        drop_down.style.visibility = "hidden";
-        btns.style.display = "grid";
-        li.innerHTML = bus;
-        li.style.background = "white";
+        for (var i = 0; i < stops.length; i++) {
+            stops[i].style.display = "none";
+        }
+        for (var i = 0; i < ex_paragraph.length; i++) {
+            ex_paragraph[i].style.visibility = "hidden";
+        }
+        // } else {
+        //   drop_down!.style.visibility = "hidden";
+        //   for (var i = 0; i < stops.length; i++) {
+        //     stops[i].style.display = "grid";
+        //   }
+        // li.innerHTML = bus;
+        // li.style.background = "white";
     }
 }
 function byDeparture(departure, max, min, ul) {
@@ -110,7 +149,7 @@ function byDeparture(departure, max, min, ul) {
         li.className = "stop";
         li.style.cursor = "pointer";
         li.onclick = function () {
-            return onStopClick(departure[i].busLineId, departure[i].time, departure[i].direction, li, ul);
+            return onStopClick(departure[i].busLineId, departure[i].time, departure[i].direction, li);
         };
         ul.appendChild(li);
     };
@@ -120,30 +159,28 @@ function byDeparture(departure, max, min, ul) {
     document.body.appendChild(ul);
 }
 function makeStops(response) {
-    // var today = new Date();
-    // var time = today.getHours() * 60 + today.getMinutes();
-    // const hours_min = Math.floor((time - 10) / 60);
-    // const minutes_min = (time - 10) % 60;
-    // const min =
-    //   hours_min + ":" + (minutes_min > 10 ? minutes_min : "0" + minutes_min);
-    // const hours_max = Math.floor((time + 30) / 60);
-    // const minutes_max = (time + 30) % 60;
-    // const max =
-    //   hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
+    var today = new Date();
+    var time = today.getHours() * 60 + today.getMinutes();
+    var hours_min = Math.floor((time - 10) / 60);
+    var minutes_min = (time - 10) % 60;
+    var min = hours_min + ":" + (minutes_min > 10 ? minutes_min : "0" + minutes_min);
+    var hours_max = Math.floor((time + 30) / 60);
+    var minutes_max = (time + 30) % 60;
+    var max = hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
     var ul1 = document.createElement("ul");
     ul1.className = "stops";
-    var min = "00:00:00";
-    var max = "24:00:00";
+    ul1.id = "stops_stations";
     var p1 = document.createElement("p");
     p1.className = "dir-p";
-    p1.textContent = "Smer A - OD GRADA";
+    p1.textContent = "Smer A";
     document.body.appendChild(p1);
     var departureA = response.busDepartureA;
     byDeparture(departureA, max, min, ul1);
     var ul2 = document.createElement("ul");
     ul2.className = "stops";
+    ul2.id = "stops_stations";
     var p2 = document.createElement("p");
-    p2.textContent = "Smer B - DO GRADA";
+    p2.textContent = "Smer B";
     p2.className = "dir-p";
     document.body.appendChild(p2);
     var departureB = response.busDepartureB;
@@ -175,6 +212,7 @@ function onClick(btn_text) {
                     stationName = document.createElement("p");
                     nav_bar = document.getElementById("station-name");
                     stationName.className = "station_name";
+                    stationName.id = "statioName";
                     stationName.textContent = btn_text;
                     nav_bar === null || nav_bar === void 0 ? void 0 : nav_bar.appendChild(stationName);
                     makeStops(response);
@@ -222,7 +260,23 @@ function getButtons(url) {
 // const back = document.getElementById("back_icon");
 // if (back) back.onclick = () => redirect();
 function redirect() {
-    location.href = "http://127.0.0.1:5500/client/";
+    location.href = "http://192.168.0.32:5500/client/";
+}
+function redirectToStops() {
+    var drop_down = document.getElementById("drop");
+    var ex_paragraph = document.getElementsByClassName("dir-p");
+    var stops = document.getElementsByClassName("stops");
+    drop_down.style.visibility = "hidden";
+    var stationName = document.getElementById("statioName");
+    var busName = document.getElementById("bus-name");
+    stationName.style.display = "block";
+    busName.style.display = "none";
+    for (var i = 0; i < ex_paragraph.length; i++) {
+        ex_paragraph[i].style.visibility = "visible";
+    }
+    for (var i = 0; i < stops.length; i++) {
+        stops[i].style.display = "grid";
+    }
 }
 function start() {
     getButtons(url);

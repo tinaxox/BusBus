@@ -1,6 +1,6 @@
 // import { Method } from "axios";
 
-const url = "http://localhost:5000/";
+const url = "http://192.168.0.32:5000/";
 
 async function get(URL: string) {
   const response = await fetch(URL, { method: "GET" });
@@ -39,27 +39,71 @@ search?.addEventListener("keydown", async (e) => {
   }
 });
 
+function findLength(str: string) {
+  var final: string;
+  if (str.length > 1) final = str;
+  else final = "0" + str;
+  return final;
+}
+
+function getTime(time: string) {
+  var today = new Date();
+  const yearToday = today.getFullYear();
+  const monthToday = (today.getMonth() + 1).toString();
+  const finalm = findLength(monthToday);
+  const dayToday = today.getDate().toString();
+  const finald = findLength(dayToday);
+  const dateToday = yearToday + "-" + finalm + "-" + finald;
+  var arrival = new Date(
+    dateToday + "T" + time[0] + time[1] + ":" + time[3] + time[4] + ":" + "00"
+  );
+  var diff = arrival.valueOf() - today.valueOf();
+  var ss = Math.floor(diff / 1000);
+  let minutes = Math.floor(ss / 60);
+  return minutes;
+}
+
 function onStopClick(
   bus: string,
   time: string,
   direction: string,
-  li: HTMLLIElement,
-  ul: HTMLUListElement
+  li: HTMLLIElement
+  // ul: HTMLUListElement
 ) {
   const drop_down = document.getElementById("drop");
+  const ex_paragraph = document.getElementsByClassName(
+    "dir-p"
+  ) as HTMLCollectionOf<HTMLElement>;
   const paragraph = document.getElementById("dir");
-  const btns = document.getElementById("btn_group");
+  const info_time = document.getElementById("info-time");
+  const info_in = document.getElementById("info-in-mins");
+  const stops = document.getElementsByClassName(
+    "stops"
+  ) as HTMLCollectionOf<HTMLElement>;
+  const stationName = document.getElementById("statioName");
+  const busName = document.getElementById("bus-name");
   if (li.innerHTML != time) {
-    li.innerHTML = time;
-    li.style.background = "rgb(84,180,53)";
+    stationName!.style.display = "none";
+    busName!.textContent = bus;
+    busName!.style.display = "block";
     paragraph!.innerHTML = direction;
+    info_time!.innerHTML = time;
+    const arrival_time = getTime(time);
+    info_in!.innerHTML = "za " + arrival_time.toString() + " minuta";
     drop_down!.style.visibility = "visible";
-    btns!.style.display = "none";
-  } else {
-    drop_down!.style.visibility = "hidden";
-    btns!.style.display = "grid";
-    li.innerHTML = bus;
-    li.style.background = "white";
+    for (var i = 0; i < stops.length; i++) {
+      stops[i].style.display = "none";
+    }
+    for (var i = 0; i < ex_paragraph.length; i++) {
+      ex_paragraph[i].style.visibility = "hidden";
+    }
+    // } else {
+    //   drop_down!.style.visibility = "hidden";
+    //   for (var i = 0; i < stops.length; i++) {
+    //     stops[i].style.display = "grid";
+    //   }
+    // li.innerHTML = bus;
+    // li.style.background = "white";
   }
 }
 
@@ -80,8 +124,7 @@ function byDeparture(
         departure[i].busLineId,
         departure[i].time,
         departure[i].direction,
-        li,
-        ul
+        li
       );
     ul.appendChild(li);
   }
@@ -89,37 +132,36 @@ function byDeparture(
 }
 
 function makeStops(response: any) {
-  // var today = new Date();
+  var today = new Date();
 
-  // var time = today.getHours() * 60 + today.getMinutes();
+  var time = today.getHours() * 60 + today.getMinutes();
 
-  // const hours_min = Math.floor((time - 10) / 60);
-  // const minutes_min = (time - 10) % 60;
-  // const min =
-  //   hours_min + ":" + (minutes_min > 10 ? minutes_min : "0" + minutes_min);
+  const hours_min = Math.floor((time - 10) / 60);
+  const minutes_min = (time - 10) % 60;
+  const min =
+    hours_min + ":" + (minutes_min > 10 ? minutes_min : "0" + minutes_min);
 
-  // const hours_max = Math.floor((time + 30) / 60);
-  // const minutes_max = (time + 30) % 60;
-  // const max =
-  //   hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
+  const hours_max = Math.floor((time + 30) / 60);
+  const minutes_max = (time + 30) % 60;
+  const max =
+    hours_max + ":" + (minutes_max > 10 ? minutes_max : "0" + minutes_max);
   const ul1 = document.createElement("ul");
   ul1.className = "stops";
+  ul1.id = "stops_stations";
 
-  const min = "00:00:00";
-
-  const max = "24:00:00";
   const p1 = document.createElement("p");
   p1.className = "dir-p";
-  p1.textContent = "Smer A - OD GRADA";
+  p1.textContent = "Smer A";
   document.body.appendChild(p1);
   const departureA = response.busDepartureA;
   byDeparture(departureA, max, min, ul1);
 
   const ul2 = document.createElement("ul");
   ul2.className = "stops";
+  ul2.id = "stops_stations";
 
   const p2 = document.createElement("p");
-  p2.textContent = "Smer B - DO GRADA";
+  p2.textContent = "Smer B";
   p2.className = "dir-p";
   document.body.appendChild(p2);
   const departureB = response.busDepartureB;
@@ -145,6 +187,7 @@ async function onClick(btn_text: string) {
   const stationName = document.createElement("p");
   const nav_bar = document.getElementById("station-name");
   stationName.className = "station_name";
+  stationName.id = "statioName";
   stationName.textContent = btn_text;
   nav_bar?.appendChild(stationName);
   makeStops(response);
@@ -179,9 +222,29 @@ async function getButtons(url: string) {
 // if (back) back.onclick = () => redirect();
 
 function redirect() {
-  location.href = "http://127.0.0.1:5500/client/";
+  location.href = "http://192.168.0.32:5500/client/";
 }
 
+function redirectToStops() {
+  const drop_down = document.getElementById("drop");
+  const ex_paragraph = document.getElementsByClassName(
+    "dir-p"
+  ) as HTMLCollectionOf<HTMLElement>;
+  const stops = document.getElementsByClassName(
+    "stops"
+  ) as HTMLCollectionOf<HTMLElement>;
+  drop_down!.style.visibility = "hidden";
+  const stationName = document.getElementById("statioName");
+  const busName = document.getElementById("bus-name");
+  stationName!.style.display = "block";
+  busName!.style.display = "none";
+  for (var i = 0; i < ex_paragraph.length; i++) {
+    ex_paragraph[i].style.visibility = "visible";
+  }
+  for (var i = 0; i < stops.length; i++) {
+    stops[i].style.display = "grid";
+  }
+}
 function start() {
   getButtons(url);
 }

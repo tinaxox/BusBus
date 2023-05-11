@@ -25,14 +25,21 @@
       />
     </div>
     <div class="station" id="station-name"></div>
+    <div class="bus_name" id="bus-name"></div>
     <div class="drop_down" id="drop">
-      <p id="dir"></p>
+      <!-- <div class="row"> -->
       <img
         class="arrow_drop"
         id="back_drop"
         onClick="redirectToStops()"
         src="./arrow.svg"
       />
+      <p id="dir" class="dirName"></p>
+      <!-- </div> -->
+      <div class="more-info">
+        <p id="info-time" class="info-t"></p>
+        <p id="info-in-mins" class="info-a"></p>
+      </div>
     </div>
     <div class="btngroup" id="btn_group"></div>
   </body>
